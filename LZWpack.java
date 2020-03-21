@@ -10,6 +10,8 @@ class LZWpack {
 		
 		while (System.console().hasNextLine()) {
 			int phraseNumber = Integer.parseInt(System.console().readLine());
+			//Scanner scan = new Scanner(System.in);
+			//int phraseNumber = scan.nextInt();
 			int phraseLength = calcBitLength(topPhraseNumber);
 			
 			buffer |= phraseNumber << bufferLength;
