@@ -2,54 +2,109 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.String;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ArrayList;
 
-class LZWencode {
+
+public class LZWencode {
+
 
     public static void main(String[] args) {
-        File file = new File("inputfile.txt");
-        FileInputStream fin = null;
+        LZWencode encoder = new LZWencode();
+        ArrayList encoded = encoder.encode(args[0]);
+//        LZWdecode decoder = new LZWdecode();
+//        ArrayList decoded = decoder.decode(encoded);
+        System.out.println(encoded);
+//        System.out.println(decoded);
+    }
+
+    private ArrayList encode(String input) {
+        Dictionary dict = new Dictionary();
+
+        byte[] data = read(input);
+        ArrayList<String> chararray = new ArrayList<String>();
+
+        for(byte d : data){
+            chararray.add(stringOf(d));}
+
+        String a = "";
+        ArrayList result = new ArrayList();
+        for (String b : chararray) {
+            String ab = a + b;
+            if (dict.contains(ab))
+                a = ab;
+            else {
+                result.add(dict.get(a));
+                dict.add(ab);
+                a = "" + b;
+            }
+        }
+
+        if (!a.equals(""))
+            result.add(dict.get(a));
+        return result;
+
+       // dict.print();
+
+
+    }
+
+    private String stringOf(byte data){
+        return String.valueOf((char) data);
+    }
+    private String stringOf(int data){
+        return String.valueOf(data);
+    }
+    private byte[] read(String input){
         try {
-            // create FileInputStream object
-            fin = new FileInputStream(file);
+            File file = new File(input);
+            byte[] bytesArray = new byte[(int) file.length()];
 
-            byte fileContent[] = new byte[(int)file.length()];
+            FileInputStream fis = new FileInputStream(file);
+            fis.read(bytesArray);
+            fis.close();
+            return bytesArray;
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return null;
+    }
 
-            // Reads up to certain bytes of data from this input stream into an array of bytes.
-            fin.read(fileContent);
-            //create string from byte array
-            String s = new String(fileContent);
-            System.out.println("File content: " + s);
+    public class Dictionary {
+        private ArrayList list = new ArrayList();
+        public Dictionary() {
+            for (int i = 0; i < 256; i++) {
+                this.add(""+(char) i);
+            }
         }
-        catch (FileNotFoundException e) {
-            System.out.println("File not found" + e);
+        public int get(String p) {
+            return list.indexOf(p);
         }
-        catch (IOException ioe) {
-            System.out.println("Exception while reading file " + ioe);
+        public void add(String p){
+            list.add(p);
         }
-        finally {
-            // close the streams using close method
-            try {
-                if (fin != null) {
-                    fin.close();
+        public int size(){
+            return this.list.size();
+        }
+        public boolean contains(String p){
+            return this.list.contains(p);
+        }
+        public void print(){
+            String result = "{";
+            int i = 0;
+            while(i < list.size()){
+                result += "(" + i + ", {"+ this.list.get(i) +"})";
+
+                if(i+1 < list.size()){
+                    result += ", ";
                 }
+                i++;
             }
-            catch (IOException ioe) {
-                System.out.println("Error while closing stream: " + ioe);
-            }
+            System.out.println("dictionary: " + result + "}");
         }
-    }
 
+    }
 }
 
-class dictionary {
-    public static void dictionary(){
-        LinkedList<Integer> list = new LinkedList<Integer>();
-    }
-    public int get(p) {
-        list.indexOf(p)
-    }
-    public int add(p){
-        list.add(p)
-    }
-
-}
