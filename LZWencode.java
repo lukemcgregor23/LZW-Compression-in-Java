@@ -1,23 +1,26 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.String;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ArrayList;
+import java.io.*;
+import java.lang.*;
+import java.util.*;
 
 
 public class LZWencode {
 
 
     public static void main(String[] args) {
-        LZWencode encoder = new LZWencode();
-        ArrayList encoded = encoder.encode(args[0]);
-//        LZWdecode decoder = new LZWdecode();
-//        ArrayList decoded = decoder.decode(encoded);
-        System.out.println(encoded);
-//        System.out.println(decoded);
+        try{
+            LZWencode encoder = new LZWencode();
+            LZWdecode decoder = new LZWdecode();
+            LZWpack packer = new LZWpack();
+
+            ArrayList encoded = encoder.encode(args[0]);
+
+
+
+            String decoded = decoder.decode(encoded);
+            BufferedWriter writer = new BufferedWriter(new FileWriter(args[1]));
+            writer.write(decoded);
+            writer.close();
+        }catch(Exception e){System.out.println(e);}
     }
 
     private ArrayList encode(String input) {
@@ -36,20 +39,21 @@ public class LZWencode {
             if (dict.contains(ab))
                 a = ab;
             else {
-                result.add(dict.get(a));
+                result.add(dict.index(a));
                 dict.add(ab);
                 a = "" + b;
             }
         }
 
         if (!a.equals(""))
-            result.add(dict.get(a));
+            result.add(dict.index(a));
+        //dict.print();
         return result;
 
-       // dict.print();
 
 
     }
+
 
     private String stringOf(byte data){
         return String.valueOf((char) data);
@@ -72,18 +76,21 @@ public class LZWencode {
         return null;
     }
 
+
+
     public class Dictionary {
-        private ArrayList list = new ArrayList();
+        private ArrayList<String> list = new ArrayList<String>();
         public Dictionary() {
             for (int i = 0; i < 256; i++) {
                 this.add(""+(char) i);
             }
         }
-        public int get(String p) {
-            return list.indexOf(p);
+        public int index(String p) {
+            return this.list.indexOf(p);
         }
+        public String get(int p) {return list.get(p);}
         public void add(String p){
-            list.add(p);
+            this.list.add(p);
         }
         public int size(){
             return this.list.size();
@@ -104,7 +111,6 @@ public class LZWencode {
             }
             System.out.println("dictionary: " + result + "}");
         }
-
     }
 }
 
