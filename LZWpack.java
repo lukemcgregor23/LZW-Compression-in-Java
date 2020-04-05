@@ -30,6 +30,8 @@ class LZWpack {
 				buffer = buffer >>> 8;
 				bufferLength -= 8;
 			}
+			
+			topPhraseNumber++;
 		}
 		
 		if (bufferLength > 0)
