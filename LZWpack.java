@@ -7,7 +7,7 @@ class LZWpack {
 		Scanner in = new Scanner(System.in);
 		
 		// topPhraseNumber represents the maximum phrase number which could be recieved
-		int topPhraseNumber = 1024;
+		int topPhraseNumber = 256;
 		// the buffer stores bits which have been read in but not yet output
 		long buffer = 0L;
 		int bufferLength = 0;

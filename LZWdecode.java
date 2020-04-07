@@ -7,28 +7,36 @@ import java.util.*;
 
 public class LZWdecode {
 
+    public static void main(String[] args) {
+        try{
+            LZWdecode decoder = new LZWdecode();
+            ArrayList encoded = new ArrayList();
+            Scanner in = new Scanner(System.in);
+            while (in.hasNextInt()) {
+                encoded.add(in.nextInt());
+            }
+            System.out.println(decoder.decode(encoded));
+        }catch(Exception e){System.out.println(e);}
+    }
+
     public String decode(ArrayList<Integer> compressed) {
-        System.out.print("("); for (int k : compressed) { System.out.print("["+k+"], ");}System.out.println(")");
-        Dictionary dictionary = new Dictionary();
-        String w = "" + (char)(int)compressed.remove(0);
-        System.out.print(w);
-        StringBuffer result = new StringBuffer(w);
-        for (int k : compressed) {
+        Dictionary dict = new Dictionary();
+        String c = "" + (char)(int)compressed.remove(0);
+        StringBuffer result = new StringBuffer(c);
+        for (int x : compressed) {
 
             String entry;
-            if (k < dictionary.size())
-                entry = dictionary.get(k);
-            else if (k == dictionary.size())
-                entry = w + w.charAt(0);
+            if (x < dict.size())
+                entry = dict.get(x);
+            else if (x == dict.size())
+                entry = c + c.charAt(0);
             else
-                throw new IllegalArgumentException("Bad compressed k: " + k);
+                break;
 
             result.append(entry);
-            System.out.print(entry);
 
-            // Add w+entry[0] to the dictionary.
-            dictionary.add(w + entry.charAt(0));
-            w = entry;
+            dict.add(c + entry.charAt(0));
+            c = entry;
         }
         return result.toString();
 
@@ -41,31 +49,12 @@ public class LZWdecode {
                 this.add(""+(char) i);
             }
         }
-        public int index(String p) {
-            return this.list.indexOf(p);
-        }
         public String get(int p) {return list.get(p);}
         public void add(String p){
             this.list.add(p);
         }
         public int size(){
             return this.list.size();
-        }
-        public boolean contains(String p){
-            return this.list.contains(p);
-        }
-        public void print(){
-            String result = "{";
-            int i = 0;
-            while(i < list.size()){
-                result += "(" + i + ", {"+ this.list.get(i) +"})";
-
-                if(i+1 < list.size()){
-                    result += ", ";
-                }
-                i++;
-            }
-            System.out.println("dictionary: " + result + "}");
         }
     }
 }

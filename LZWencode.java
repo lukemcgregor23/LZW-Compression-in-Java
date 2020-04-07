@@ -9,17 +9,10 @@ public class LZWencode {
     public static void main(String[] args) {
         try{
             LZWencode encoder = new LZWencode();
-            LZWdecode decoder = new LZWdecode();
-            LZWpack packer = new LZWpack();
-
             ArrayList encoded = encoder.encode(args[0]);
-
-
-
-            String decoded = decoder.decode(encoded);
-            BufferedWriter writer = new BufferedWriter(new FileWriter(args[1]));
-            writer.write(decoded);
-            writer.close();
+            for (int counter = 0; counter < encoded.size(); counter++) {
+                System.out.println(encoded.get(counter));
+            }
         }catch(Exception e){System.out.println(e);}
     }
 

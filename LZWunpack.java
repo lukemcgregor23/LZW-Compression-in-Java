@@ -1,6 +1,6 @@
 class LZWunpack {
 	public static void main(String[] args) throws Exception {
-		int topPhraseNumber = 15;
+		int topPhraseNumber = 256;
 		long buffer = 0L;
 		int bufferLength = 0;
 		
