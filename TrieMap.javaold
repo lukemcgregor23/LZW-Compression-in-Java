@@ -1,3 +1,5 @@
+// Name: Luke
+
 public class TrieMap {
     /*
      * Implementation of a trie tree. (see http://en.wikipedia.org/wiki/Trie)
