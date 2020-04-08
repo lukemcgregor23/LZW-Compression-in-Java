@@ -8,20 +8,22 @@ import java.util.*;
 public class LZWdecode {
 
     public static void main(String[] args) {
-        try{
+        try {
             LZWdecode decoder = new LZWdecode();
             ArrayList encoded = new ArrayList();
             Scanner in = new Scanner(System.in);
             while (in.hasNextInt()) {
                 encoded.add(in.nextInt());
             }
-            System.out.println(decoder.decode(encoded));
-        }catch(Exception e){System.out.println(e);}
+            System.out.print(decoder.decode(encoded));
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public String decode(ArrayList<Integer> compressed) {
         Dictionary dict = new Dictionary();
-        String c = "" + (char)(int)compressed.remove(0);
+        String c = "" + (char) (int) compressed.remove(0);
         StringBuffer result = new StringBuffer(c);
         for (int x : compressed) {
 
@@ -32,7 +34,6 @@ public class LZWdecode {
                 entry = c + c.charAt(0);
             else
                 break;
-
             result.append(entry);
 
             dict.add(c + entry.charAt(0));
@@ -57,4 +58,25 @@ public class LZWdecode {
             return this.list.size();
         }
     }
+//    public class Dictionary {
+//        int size = 255;
+//        TrieMap trieMap = new TrieMap();
+//        public Dictionary() {
+//            for (int i = 0; i <= 255; i++) {
+//                trieMap.put(""+i, ""+(char)i);
+//            }
+//        }
+//        public String get(int p) {
+//            Object got = trieMap.get(""+p);
+//            return got.toString();
+//        }
+//        public void add(String p){
+//            size++;
+//            trieMap.put(""+size, p);
+//        }
+//        public int size(){
+//            return size;
+//        }
+//    }
 }
+

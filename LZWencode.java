@@ -72,37 +72,25 @@ public class LZWencode {
 
 
     public class Dictionary {
-        private ArrayList<String> list = new ArrayList<String>();
+        int size = 255;
+        TrieMap trieMap = new TrieMap();
         public Dictionary() {
-            for (int i = 0; i < 256; i++) {
-                this.add(""+(char) i);
+            for (int i = 0; i <= 255; i++) {
+                trieMap.put(""+(char)i, i);
             }
         }
         public int index(String p) {
-            return this.list.indexOf(p);
+            return Integer.parseInt(trieMap.get(p).toString());
         }
-        public String get(int p) {return list.get(p);}
         public void add(String p){
-            this.list.add(p);
+            size++;
+            trieMap.put(p, size);
         }
         public int size(){
-            return this.list.size();
+            return size;
         }
         public boolean contains(String p){
-            return this.list.contains(p);
-        }
-        public void print(){
-            String result = "{";
-            int i = 0;
-            while(i < list.size()){
-                result += "(" + i + ", {"+ this.list.get(i) +"})";
-
-                if(i+1 < list.size()){
-                    result += ", ";
-                }
-                i++;
-            }
-            System.out.println("dictionary: " + result + "}");
+            if(trieMap.get(p) != null) { return true; } else { return false; }
         }
     }
 }
