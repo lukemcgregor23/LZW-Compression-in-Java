@@ -1,8 +1,8 @@
 // Name: Kiera Leahy
 // ID:   1159999
 
-// Name: Luke
-// ID:
+// Name: Luke McGregor
+// ID: 1359403
 
 class LZWunpack {
 	// I'm going to ignore this exception because

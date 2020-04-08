@@ -1,5 +1,5 @@
-// Name: Luke
-// ID:
+// Name: Luke McGregor
+// ID: 1359403
 
 // Name: Kiera Leahy
 // ID: 1159999
@@ -24,15 +24,12 @@ public class LZWencode {
 
     private ArrayList encode() {
         Dictionary dict = new Dictionary();
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         ArrayList<String> chararray = new ArrayList<String>();
         try {
-            String input = br.readLine();
-            while (input != null) {
-                for (int i = 0; i <= input.length(); i++) {
-                    chararray.add(stringOf(i));
-                }
-                input = br.readLine();
+            int input = System.in.read();
+            while (input != -1) {
+                chararray.add(stringOf((byte)input));
+                input = System.in.read();
             }
         }catch(Exception e){System.out.println(e);}
 

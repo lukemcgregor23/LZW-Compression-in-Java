@@ -1,8 +1,8 @@
 // Name: Kiera Leahy
 // ID:   1159999
 
-// Name: Luke
-// ID:
+// Name: Luke McGregor
+// ID: 1359403
 
 import java.util.Scanner;
 
