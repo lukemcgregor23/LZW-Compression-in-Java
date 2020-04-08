@@ -13,18 +13,19 @@ public class LZWencode {
 
 
     public static void main(String[] args) {
-        try{
-            LZWencode encoder = new LZWencode();
-            ArrayList encoded = encoder.encode();
-            for (int counter = 0; counter < encoded.size(); counter++) {
-                System.out.println(encoded.get(counter));
-            }
-        }catch(Exception e){System.out.println(e);}
+        LZWencode encoder = new LZWencode();
+        ArrayList encoded = encoder.encode();
+        //print phrase numbers
+        for (int counter = 0; counter < encoded.size(); counter++) {
+            System.out.println(encoded.get(counter));
+        }
     }
 
     private ArrayList encode() {
+        //create the dictionary
         Dictionary dict = new Dictionary();
         ArrayList<String> chararray = new ArrayList<String>();
+        //get input from stdin
         try {
             int input = System.in.read();
             while (input != -1) {
@@ -33,6 +34,9 @@ public class LZWencode {
             }
         }catch(Exception e){System.out.println(e);}
 
+        // for each character run the lzw algorithim:
+        // find longest matching string in dict and then add its idex number to the result.
+        // then add the next char to it and add itinto the dictionary as a new entry
         String a = "";
         ArrayList result = new ArrayList();
         for (String b : chararray) {
@@ -55,31 +59,14 @@ public class LZWencode {
 
     }
 
-
+    //helper code to convery bytes to chars
     private String stringOf(byte data){
         return String.valueOf((char) data);
     }
-    private String stringOf(int data){
-        return String.valueOf(data);
-    }
-    private byte[] read(String input){
-        try {
-            File file = new File(input);
-            byte[] bytesArray = new byte[(int) file.length()];
-
-            FileInputStream fis = new FileInputStream(file);
-            fis.read(bytesArray);
-            fis.close();
-            return bytesArray;
-        }catch(Exception e){
-            System.out.println(e);
-        }
-        return null;
-    }
-
 
 
     public class Dictionary {
+        //initilize the dictionary with the full 255 bytes posible with 8 bits
         int size = 255;
         TrieMap trieMap = new TrieMap();
         public Dictionary() {
@@ -87,6 +74,8 @@ public class LZWencode {
                 trieMap.put(""+(char)i, i);
             }
         }
+
+        // map trie functions sowe can remember what they do eiser
         public int index(String p) {
             return Integer.parseInt(trieMap.get(p).toString());
         }
@@ -94,24 +83,20 @@ public class LZWencode {
             size++;
             trieMap.put(p, size);
         }
+        public boolean contains(String p){
+            if(trieMap.get(p) != null) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        //if we ever need the size of the trie it is recorded in the size var
         public int size(){
             return size;
-        }
-        public boolean contains(String p){
-            if(trieMap.get(p) != null) { return true; } else { return false; }
         }
     }
 }
 class TrieMap {
-    /*
-     * Implementation of a trie tree. (see http://en.wikipedia.org/wiki/Trie)
-     * though I made it faster and more compact for long key strings
-     * by building tree nodes only as needed to resolve collisions.
-     * Each letter of a key is the index into the following array.
-     * Values stored in the array are either a Leaf containing the user's value or
-     * another TrieMap node if more than one key shares the key prefix up to that point.
-     * Null elements indicate unused, I.E. available slots.
-     */
     private Object[] mChars = new Object[256];
     private Object mPrefixVal; // Used only for values of prefix keys.
 
@@ -141,12 +126,7 @@ class TrieMap {
     }
 
 
-    /**
-     * Inserts a key/value pair.
-     *
-     * @param key may be empty or contain low-order chars 0..255 but must not be null.
-     * @param val Your data. Any data class except another TrieMap. Null values erase entries.
-     */
+    // Inserts a key/value pair.
     public void put(String key, Object val) {
         assert key != null;
         assert !(val instanceof TrieMap); // Only we get to store TrieMap nodes. TODO: Allow it.
@@ -189,9 +169,7 @@ class TrieMap {
     }
 
 
-    /**
-     * Retrieve a value for a given key or null if not found.
-     */
+    // Retrieve a value for a given key or null if not found.
     public Object get(String key) {
         assert key != null;
         if(key.length() == 0) {
@@ -216,36 +194,5 @@ class TrieMap {
             }
         }
         return null; // Not found.
-    }
-
-
-    /**
-     * Simple example test program.
-     */
-    public static void main(String[] args) {
-        // Insert a bunch of key/value pairs.
-        TrieMap trieMap = new TrieMap();
-        trieMap.put("123", "456");
-        trieMap.put("Java", "rocks");
-        trieMap.put("Melinda", "too");
-        trieMap.put("Moo", "cow"); // Will collide with "Melinda".
-        trieMap.put("Moon", "walk"); // Collides with "Melinda" and turns "Moo" into a prefix.
-        trieMap.put("", "Root"); // You can store one value at the empty key if you like.
-
-        // Test for inserted, nonexistent, and deleted keys.
-        System.out.println("123 = " + trieMap.get("123"));
-        System.out.println("Java = " + trieMap.get("Java"));
-        System.out.println("Melinda = " + trieMap.get("Melinda"));
-        System.out.println("Moo = " + trieMap.get("Moo"));
-        System.out.println("Moon = " + trieMap.get("Moon"));
-        System.out.println("Mo = " + trieMap.get("Mo")); // Should return null.
-        System.out.println("Empty key = " + trieMap.get("")); // Should return "Root".
-        System.out.println("Moose = " + trieMap.get("Moose")); // Never added so should return null.
-        System.out.println("Nothing = " + trieMap.get("Nothing")); // Ditto.
-        trieMap.put("123", null); // Removes this leaf entry.
-        System.out.println("After removal, 123 = " + trieMap.get("123")); // Should now return null.
-        trieMap.put("Moo", null); // Removes this prefix entry. (Special case to test internal logic).
-        System.out.println("After removal, Moo = " + trieMap.get("Moo")); // Should now return null.
-        trieMap.put("Moon", null); // Internal test of branch pruning.
     }
 }

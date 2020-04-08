@@ -15,6 +15,7 @@ public class LZWdecode {
 
     public static void main(String[] args) {
         try {
+            //create a decoder and add the input from stdin to the encoded arraylist
             LZWdecode decoder = new LZWdecode();
             ArrayList encoded = new ArrayList();
             Scanner in = new Scanner(System.in);
@@ -28,9 +29,17 @@ public class LZWdecode {
     }
 
     public String decode(ArrayList<Integer> compressed) {
+        //create a new dictionary (just a arraylist this time)
         Dictionary dict = new Dictionary();
+        //add the first char to c
         String c = "" + (char) (int) compressed.remove(0);
+        //create stringbuffer with c (the first char of the compressesd file)
         StringBuffer result = new StringBuffer(c);
+        // for every phrase number in the compressed file
+        // see if the phrase number is smaller than the dictionary
+        // if it is get the data for that phrase number,
+        // append it to the result and add a new dictionary entry of  c + c.charAt(0)
+        // otherwise add c + c.charAt(0) to the result and add a new dict entry of c + c.charAt(0) + c + c.charAt(0) + c.charAt(0)
         for (int x : compressed) {
 
             String entry;
@@ -50,12 +59,15 @@ public class LZWdecode {
 
     }
     public class Dictionary {
+        // create new arraylist to store everything
+        // initilize the dictionary with the full 255 bytes posible with 8 bits
         private ArrayList<String> list = new ArrayList<String>();
         public Dictionary() {
             for (int i = 0; i < 256; i++) {
                 this.add(""+(char) i);
             }
         }
+        //helper functions to interact with the arraylist eaiser
         public String get(int p) {return list.get(p);}
         public void add(String p){
             this.list.add(p);
@@ -64,25 +76,5 @@ public class LZWdecode {
             return this.list.size();
         }
     }
-//    public class Dictionary {
-//        int size = 255;
-//        TrieMap trieMap = new TrieMap();
-//        public Dictionary() {
-//            for (int i = 0; i <= 255; i++) {
-//                trieMap.put(""+i, ""+(char)i);
-//            }
-//        }
-//        public String get(int p) {
-//            Object got = trieMap.get(""+p);
-//            return got.toString();
-//        }
-//        public void add(String p){
-//            size++;
-//            trieMap.put(""+size, p);
-//        }
-//        public int size(){
-//            return size;
-//        }
-//    }
 }
 
