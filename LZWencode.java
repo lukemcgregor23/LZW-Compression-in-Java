@@ -9,21 +9,26 @@ public class LZWencode {
     public static void main(String[] args) {
         try{
             LZWencode encoder = new LZWencode();
-            ArrayList encoded = encoder.encode(args[0]);
+            ArrayList encoded = encoder.encode();
             for (int counter = 0; counter < encoded.size(); counter++) {
                 System.out.println(encoded.get(counter));
             }
         }catch(Exception e){System.out.println(e);}
     }
 
-    private ArrayList encode(String input) {
+    private ArrayList encode() {
         Dictionary dict = new Dictionary();
-
-        byte[] data = read(input);
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         ArrayList<String> chararray = new ArrayList<String>();
-
-        for(byte d : data){
-            chararray.add(stringOf(d));}
+        try {
+            String input = br.readLine();
+            while (input != null) {
+                for (int i = 0; i <= input.length(); i++) {
+                    chararray.add(stringOf(i));
+                }
+                input = br.readLine();
+            }
+        }catch(Exception e){System.out.println(e);}
 
         String a = "";
         ArrayList result = new ArrayList();
