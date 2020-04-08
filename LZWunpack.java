@@ -1,7 +1,7 @@
 // Name: Kiera Leahy
 // ID:   1159999
 
-// Name:
+// Name: Luke
 // ID:
 
 class LZWunpack {
